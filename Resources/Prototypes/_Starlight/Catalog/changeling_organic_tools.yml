@@ -1,0 +1,38 @@
+- type: listing
+  id: EvolutionMenuOrganicSequencer
+  name: evolutionmenu-organic-sequencer-name
+  description: evolutionmenu-organic-sequencer-desc
+  icon: { sprite: Objects/Tools/access_breaker.rsi, state: icon }
+  productAction: ActionChangelingEmag
+  cost:
+    EvolutionPoint: 4
+  categories: [ ChangelingAbilityUtility ]
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: EvolutionMenuShockHand
+  name: evolutionmenu-shock-hand-name
+  description: evolutionmenu-shock-hand-desc
+  icon: { sprite: Clothing/Hands/Gloves/powerglove.rsi, state: icon-on }
+  productAction: ActionChangelingShockHand
+  cost:
+    EvolutionPoint: 5
+  categories: [ ChangelingAbilityCombat ]
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: EvolutionMenuUtilityBreathing
+  name: evolutionmenu-utility-breathing-name
+  description: evolutionmenu-utility-breathing-desc
+  icon: { sprite: _Starlight/Interface/Alerts/holding_breath.rsi, state: holding_breath }
+  productAction: ActionToggleChangelingBreathing
+  cost:
+    EvolutionPoint: 0
+  categories: [ ChangelingAbilityUtility ]
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
