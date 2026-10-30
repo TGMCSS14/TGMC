@@ -16,6 +16,7 @@ using Content.Shared.Stunnable;
 using Content.Shared.Tag;
 using Content.Shared.Tools.Systems;
 using Robust.Shared.Audio;
+using Robust.Shared.Physics; // Starlight-edit
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Physics.Systems;
@@ -581,6 +582,22 @@ public abstract partial class SharedDoorSystem : EntitySystem
 
         _doorIntersecting.Clear();
         _entityLookup.GetLocalEntitiesIntersecting(xform.GridUid.Value, tileRef.GridIndices, _doorIntersecting, gridComp: mapGridComp, flags: (LookupFlags.All & ~LookupFlags.Sensors));
+        // Starlight-start: The inset tile lookup misses airlock edge contacts, leaving them out of CurrentlyCrushing.
+        // Check the airlock fixture for dynamic bodies without collecting static walls on adjacent tiles.
+        if (HasComp<AirlockComponent>(uid) && TryComp<FixturesComponent>(uid, out var fixtures))
+        {
+            var doorTransform = PhysicsSystem.GetLocalPhysicsTransform(uid, xform);
+            foreach (var fixture in fixtures.Fixtures.Values)
+            {
+                if (!fixture.Hard)
+                    continue;
+
+                var bounds = fixture.Shape.ComputeAABB(doorTransform, 0);
+                _entityLookup.GetLocalEntitiesIntersecting(xform.GridUid.Value, bounds, _doorIntersecting,
+                    flags: LookupFlags.Dynamic);
+            }
+        }
+        // Starlight-end
 
         // TODO SLOTH fix electro's code.
         // ReSharper disable once InconsistentNaming
